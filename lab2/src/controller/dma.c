@@ -24,12 +24,12 @@ void dma_set_stream_5_usart2() {
     DMA1_Stream5->PAR = (uint32_t)&USART2->DR;
 }
 
-void dma_start_usart_send() {
+void dma_start_stream_6() {
     DMA1->HIFCR = DMA_HIFCR_CTCIF6;
     NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 }
 
-void dma_start_usart_receive() {
+void dma_start_stream_5() {
 	DMA1->HIFCR = DMA_HIFCR_CTCIF5;
 	NVIC_EnableIRQ(DMA1_Stream5_IRQn);
 }

@@ -11,11 +11,11 @@ typedef struct {
 
 static Config config[CONFIG_COUNT];
 
-void init_config(Config* config, int32_t irq, uint8_t pin_begin, uint8_t pin_end) {
-	config->irq = irq;
-	config->pin_begin = pin_begin;
-	config->pin_end = pin_end;
-	config->enabled = false;
+void init_config(Config* c, int32_t irq, uint8_t pin_begin, uint8_t pin_end) {
+	c->irq = irq;
+	c->pin_begin = pin_begin;
+	c->pin_end = pin_end;
+	c->enabled = false;
 }
 
 void interrupts_init() {
@@ -48,15 +48,4 @@ void interrupt_periphery_setup(Periphery* periphery) {
 			break;
 		}
 	}
-}
-
-irq_level_t interrupt_pause() {
-	volatile irq_level_t level;
-	level = __get_PRIMASK();
-	__disable_irq();
-	return level;
-}
-
-void interrupt_resume(irq_level_t level) {
-	__set_PRIMASK(level);
 }

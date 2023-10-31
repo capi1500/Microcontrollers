@@ -29,6 +29,7 @@ void try_handle_debug(Periphery* periphery, Periphery* led, bool value) {
 void try_handle(Button button) {
 	Periphery* periphery = &get_buttons()[button];
 	if (EXTI->PR & periphery->mask) {
+		periphery_read_state(periphery);
 		queue_buffer_add(&buffer, button_get_message(button));
 		if (dma_can_start_send_usart2()) {
 			send_dma_usart2();
@@ -38,7 +39,7 @@ void try_handle(Button button) {
 }
 
 void EXTI0_IRQHandler(void) {
-	try_handle(BUTTON_USER);
+	try_handle(BUTTON_MODE);
 }
 
 void EXTI3_IRQHandler(void) {
@@ -55,16 +56,14 @@ void EXTI9_5_IRQHandler(void) {
 }
 
 void EXTI15_10_IRQHandler(void) {
-	try_handle(BUTTON_MODE);
+	try_handle(BUTTON_USER);
 	try_handle(BUTTON_FIRE);
 }
 
 void DMA1_Stream6_IRQHandler() {
-	/* Odczytaj zgłoszone przerwania DMA1. */
 	uint32_t isr = DMA1->HISR;
 	if (isr & DMA_HISR_TCIF6) {
 		DMA1->HIFCR = DMA_HIFCR_CTCIF6;
-
 		if (queue_buffer_size(&buffer) > 0) {
 			send_dma_usart2();
 		}

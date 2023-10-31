@@ -1,13 +1,9 @@
 #include <gpio.h>
-#include <stm32.h>
-#include <string.h>
 
-#include "controller/base.h"
 #include "controller/usart2.h"
 #include "controller/dma.h"
 #include "controller/interrupts.h"
 
-#include "periphery/periphery.h"
 #include "periphery/buttons.h"
 #include "periphery/leds.h"
 #include "interrupts_handlers.h"
@@ -32,7 +28,7 @@ int main() {
 	dma_set_stream_6_usart2();
 
 	start_usart2();
-	dma_start_usart_send();
+	dma_start_stream_6();
 
 	while(true) {
 		__NOP();

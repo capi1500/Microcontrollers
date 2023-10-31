@@ -21,6 +21,8 @@ void periphery_toggle(Periphery* periphery);
 
 bool periphery_is_on(Periphery* periphery);
 bool periphery_is_off(Periphery* periphery);
-bool periphery_changed(Periphery* periphery);
+
+bool periphery_read_state(Periphery* periphery);
+bool periphery_read_state_is_changed(Periphery* periphery);
 
 #endif //PERIPHERY_H
