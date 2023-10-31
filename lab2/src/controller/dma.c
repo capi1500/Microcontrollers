@@ -24,10 +24,14 @@ void dma_set_stream_5_usart2() {
     DMA1_Stream5->PAR = (uint32_t)&USART2->DR;
 }
 
-void dma_start_usart() {
-    DMA1->HIFCR = DMA_HIFCR_CTCIF6 | DMA_HIFCR_CTCIF5;
+void dma_start_usart_send() {
+    DMA1->HIFCR = DMA_HIFCR_CTCIF6;
     NVIC_EnableIRQ(DMA1_Stream6_IRQn);
-    NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+}
+
+void dma_start_usart_receive() {
+	DMA1->HIFCR = DMA_HIFCR_CTCIF5;
+	NVIC_EnableIRQ(DMA1_Stream5_IRQn);
 }
 
 void dma_start_send_usart2(const char* buff) {

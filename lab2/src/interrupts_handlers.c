@@ -70,16 +70,3 @@ void DMA1_Stream6_IRQHandler() {
 		}
 	}
 }
-
-void DMA1_Stream5_IRQHandler() {
-	/* Odczytaj zgłoszone przerwania DMA1. */
-	uint32_t isr = DMA1->HISR;
-	if (isr & DMA_HISR_TCIF5) {
-		/* Obsłuż zakończenie transferu
-		w strumieniu 5. */
-		DMA1->HIFCR = DMA_HIFCR_CTCIF5;
-		/* ... */
-		/* Ponownie uaktywnij odbieranie. */
-		/* ... */
-	}
-}

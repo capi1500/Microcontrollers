@@ -25,7 +25,7 @@ void periphery_toggle(Periphery* periphery) {
 }
 
 bool periphery_is_on(Periphery* periphery) {
-    return periphery->enabled_state ^ ((periphery->GPIO->IDR & periphery->mask) == 0);
+    return ((periphery->GPIO->IDR >> periphery->pin) & 1) == (periphery->enabled_state ? 1 : 0);
 }
 
 bool periphery_is_off(Periphery* periphery) {

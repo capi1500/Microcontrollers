@@ -28,12 +28,11 @@ int main() {
 	for (int i = 0; i < BUTTONS_COUNT; i++) {
 		interrupt_periphery_setup(&get_buttons()[i]);
 	}
-	
-	dma_set_stream_5_usart2();
+
 	dma_set_stream_6_usart2();
 
 	start_usart2();
-	dma_start_usart();
+	dma_start_usart_send();
 
 	while(true) {
 		__NOP();

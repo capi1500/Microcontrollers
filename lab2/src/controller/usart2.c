@@ -25,7 +25,7 @@ void init_usart2() {
 	USART2->CR2 = USART_StopBits_1;
 
 	// Using DMA
-	USART2->CR3 = USART_CR3_DMAT | USART_CR3_DMAR; // pierwsze do wysyłania
+	USART2->CR3 = USART_CR3_DMAT; // | USART_CR3_DMAR; // drugie do odbierania
 
 	USART2->BRR = (PCLK1_HZ + (BAUD / 2U)) / BAUD;
 }
