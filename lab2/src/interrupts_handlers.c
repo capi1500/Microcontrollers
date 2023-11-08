@@ -2,7 +2,6 @@
 
 #include "interrupts_handlers.h"
 #include "periphery/periphery.h"
-#include "periphery/leds.h"
 #include "periphery/buttons.h"
 #include "controller/dma.h"
 #include "data/queue_buffer.h"
@@ -10,20 +9,13 @@
 
 static QueueBuffer buffer;
 
-void init_interrupt_handlers() {
+void init_interrupt_handlers(void) {
 	init_queue_buffer(&buffer);
 }
 
 // Resets QueueBuffer buffer and starts sending string
-void send_dma_usart2() {
+void send_dma_usart2(void) {
 	dma_start_send_usart2(queue_buffer_get(&buffer));
-}
-
-void try_handle_debug(Periphery* periphery, Periphery* led, bool value) {
-	if (EXTI->PR & periphery->mask) {
-		periphery_set(led, value);
-		EXTI->PR = periphery->mask;
-	}
 }
 
 void try_handle(Button button) {
@@ -60,7 +52,7 @@ void EXTI15_10_IRQHandler(void) {
 	try_handle(BUTTON_FIRE);
 }
 
-void DMA1_Stream6_IRQHandler() {
+void DMA1_Stream6_IRQHandler(void) {
 	uint32_t isr = DMA1->HISR;
 	if (isr & DMA_HISR_TCIF6) {
 		DMA1->HIFCR = DMA_HIFCR_CTCIF6;

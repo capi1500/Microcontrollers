@@ -2,11 +2,11 @@
 
 static Periphery leds[LEDS_COUNT];
 
-Periphery* get_leds() {
+Periphery* get_leds(void) {
 	return leds;
 }
 
-void init_leds() {
+void init_leds(void) {
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN;
 	
 	__NOP();

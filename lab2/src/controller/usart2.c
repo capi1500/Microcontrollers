@@ -1,6 +1,7 @@
+#include <gpio.h>
 #include "usart2.h"
 
-void init_usart2() {
+void init_usart2(void) {
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
 	RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
 
@@ -30,19 +31,19 @@ void init_usart2() {
 	USART2->BRR = (PCLK1_HZ + (BAUD / 2U)) / BAUD;
 }
 
-void start_usart2() {
+void start_usart2(void) {
 	USART2->CR1 |= USART_CR1_UE;
 }
 
-bool can_read() {
+bool can_read(void) {
 	return USART2->SR & USART_SR_RXNE;
 }
 
-bool can_write() {
+bool can_write(void) {
 	return USART2->SR & USART_SR_TXE;
 }
 
-char read_char() {
+char read_char(void) {
 	return USART2->DR;
 }
 

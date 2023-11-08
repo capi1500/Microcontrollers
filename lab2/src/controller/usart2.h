@@ -1,7 +1,6 @@
 #ifndef USART2_H
 #define USART2_H
 
-#include <gpio.h>
 #include <stm32.h>
 #include "base.h"
 #include "../types.h"
@@ -28,13 +27,13 @@
 #define PCLK1_HZ HSI_HZ
 #define BAUD 9600U
 
-void init_usart2();
-void start_usart2();
+void init_usart2(void);
+void start_usart2(void);
 
-bool can_read();
-bool can_write();
+bool can_read(void);
+bool can_write(void);
 
-char read_char();
+char read_char(void);
 void send_char(char c);
 
 #endif // USART2_H

@@ -1,8 +1,7 @@
 #ifndef QUEUE_BUFFER_H
 #define QUEUE_BUFFER_H
 
-#include <gpio.h>
-#include <stm32.h>
+#include <stdint.h>
 #include "../types.h"
 
 #define QUEUE_BUFFER_SIZE 512

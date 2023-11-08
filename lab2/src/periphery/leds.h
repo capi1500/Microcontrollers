@@ -1,8 +1,6 @@
 #ifndef LEDS_H
 #define LEDS_H
 
-#include <gpio.h>
-#include <stm32.h>
 #include "../types.h"
 #include "periphery.h"
 
@@ -14,8 +12,8 @@ enum {
     LEDS_COUNT
 };
 
-Periphery* get_leds();
+Periphery* get_leds(void);
 
-void init_leds();
+void init_leds(void);
 
 #endif // LEDS_H

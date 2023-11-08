@@ -28,7 +28,7 @@ void init_message(Button button, const char* pressed, const char* released) {
 	button_messages[button].message[1] = pressed;
 }
 
-void init_button_messages() {
+void init_button_messages(void) {
 	init_message(BUTTON_LEFT, left_pressed, left_released);
 	init_message(BUTTON_RIGHT, right_pressed, right_released);
 	init_message(BUTTON_UP, up_pressed, up_released);

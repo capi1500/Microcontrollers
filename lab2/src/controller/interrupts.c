@@ -18,7 +18,7 @@ void init_config(Config* c, int32_t irq, uint8_t pin_begin, uint8_t pin_end) {
 	c->enabled = false;
 }
 
-void interrupts_init() {
+void interrupts_init(void) {
 	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
 
 	init_config(&config[0], EXTI0_IRQn, 0, 0);

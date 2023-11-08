@@ -1,14 +1,12 @@
-#include <gpio.h>
+#include <stm32.h>
 
 #include "controller/usart2.h"
 #include "controller/dma.h"
 #include "controller/interrupts.h"
 
 #include "periphery/buttons.h"
-#include "periphery/leds.h"
 #include "interrupts_handlers.h"
 #include "commands.h"
-
 
 int main() {
 	init_interrupt_handlers();
@@ -17,7 +15,6 @@ int main() {
 	interrupts_init();
 
 	init_buttons();
-	init_leds();
 	init_usart2();
 	init_dma();
 	

@@ -3,7 +3,7 @@
 
 #include "periphery/buttons.h"
 
-void init_button_messages();
+void init_button_messages(void);
 const char* button_get_message(Button button);
 
 #endif // COMMANDS_H

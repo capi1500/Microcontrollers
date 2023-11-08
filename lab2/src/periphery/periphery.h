@@ -2,7 +2,6 @@
 #define PERIPHERY_H
 
 #include <gpio.h>
-#include <stm32.h>
 #include "../types.h"
 
 typedef struct {

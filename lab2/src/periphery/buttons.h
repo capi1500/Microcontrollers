@@ -1,8 +1,6 @@
 #ifndef BUTTONS_H
 #define BUTTONS_H
 
-#include <gpio.h>
-#include <stm32.h>
 #include "../types.h"
 #include "periphery.h"
 
@@ -17,8 +15,8 @@ typedef enum {
 	BUTTONS_COUNT
 } Button;
 
-Periphery* get_buttons();
+Periphery* get_buttons(void);
 
-void init_buttons();
+void init_buttons(void);
 
 #endif // BUTTONS_H
