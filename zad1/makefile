@@ -14,11 +14,11 @@ LDFLAGS = $(FLAGS) -Wl,--gc-sections -nostartfiles \
 vpath %.c ../stm32/src
 
 OBJECTS = src/main.o \
+	src/calculator.o \
+	src/input.o \
 	startup_stm32.o \
 	delay.o \
-	gpio.o \
-	fonts.o \
-	lcd.o
+	gpio.o
 TARGET = main
 
 .SECONDARY: $(TARGET).elf $(OBJECTS)
