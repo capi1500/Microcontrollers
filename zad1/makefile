@@ -16,6 +16,7 @@ vpath %.c ../stm32/src
 OBJECTS = src/main.o \
 	src/calculator.o \
 	src/input.o \
+	src/display.o \
 	startup_stm32.o \
 	delay.o \
 	gpio.o

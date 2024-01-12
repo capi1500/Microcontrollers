@@ -1,14 +1,10 @@
-#include <lcd.h>
 #include <delay.h>
 #include "calculator.h"
+#include "display.h"
 
 Calculator calculator;
 
 int main() {
 	calculator_init(&calculator);
-	
-	LCDconfigure();
-
-	LCDgoto(0, 8);
-	LCDputchar('+');
+	display_init();
 }
