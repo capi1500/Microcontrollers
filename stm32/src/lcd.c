@@ -278,11 +278,11 @@ static void LCDdrawChar(unsigned c) {
 
 /** Public interface implementation **/
 
-void LCDconfigure() {
+void LCDconfigure(const font_t* font) {
   /* See Errata, 2.1.6 Delay after an RCC peripheral clock enabling */
   RCCconfigure();
   /* Initialize global variables. */
-  LCDsetFont(&LCD_DEFAULT_FONT);
+  LCDsetFont(font);
   LCDsetColors(LCD_COLOR_WHITE, LCD_COLOR_BLUE);
   /* Initialize hardware. */
   GPIOconfigure();

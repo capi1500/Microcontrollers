@@ -19,6 +19,8 @@ OBJECTS = src/main.o \
 	src/display.o \
 	startup_stm32.o \
 	delay.o \
+	fonts.o \
+	lcd.o \
 	gpio.o
 TARGET = main
 

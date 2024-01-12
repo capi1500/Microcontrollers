@@ -7,6 +7,7 @@ void append_number(Calculator* calculator, int* num, int digit) {
 void calculator_init(Calculator* calculator) {
 	calculator->num1 = 0;
 	calculator->num2 = 0;
+	calculator->result = 0;
 	calculator->operator = None;
 	calculator->state = FirstNumber;
 }
@@ -23,7 +24,7 @@ int calculate(Calculator* calculator) {
 			return a * b;
 		case Divide:
 			return b == 0 ? 0 : a / b;
-		case None:
+		default:
 			return 0;
 	}
 }
@@ -62,8 +63,10 @@ void calculator_process_input(Calculator* calculator, Input input) {
 	} else if (input == OpResult) {
 		switch (calculator->state) {
 			case SecondNumber:
-				calculator->num1 = calculate(calculator);
+				calculator->result = calculate(calculator);
+				calculator->num1 = 0;
 				calculator->num2 = 0;
+				calculator->state = Result;
 				break;
 			default:
 				break;
