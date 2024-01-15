@@ -24,7 +24,6 @@ void timer_start(Timer* timer);
 void timer_stop(Timer* timer);
 void timer_enable_interrupts(Timer* timer);
 
-unsigned timer_get_value(Timer* timer);
 void timer_set_value(Timer* timer, unsigned value);
 
 #endif // TIMER_H

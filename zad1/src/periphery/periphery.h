@@ -17,7 +17,6 @@ void periphery_init(Periphery* periphery, GPIO_TypeDef* GPIO, uint8_t pin, bool 
 
 void periphery_set(Periphery* periphery, bool value);
 
-bool periphery_is_on(Periphery* periphery);
 bool periphery_read_state(Periphery* periphery);
 
 #endif //PERIPHERY_H

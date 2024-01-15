@@ -50,10 +50,6 @@ void timer_enable_interrupts(Timer* timer) {
 	timer_interrupts_enable(timer);
 }
 
-unsigned timer_get_value(Timer* timer) {
-	return timer->CNT;
-}
-
 void timer_set_value(Timer* timer, unsigned value) {
 	timer->CNT = value;
 }

@@ -1,8 +1,7 @@
-#include <gpio.h>
-
 #include "handlers.h"
 #include "../periphery/periphery.h"
 #include "../periphery/keyboard.h"
+#include "../timer/timer.h"
 #include "interrupts.h"
 
 void interrupt_handlers_init(void) {
