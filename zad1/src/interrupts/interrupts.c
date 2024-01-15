@@ -49,20 +49,8 @@ void interrupts_init(void) {
 	init_timer_config(&timer_config[3], TIM5, TIM5_IRQn);
 }
 
-void periphery_interrupts_setup(Periphery* periphery, EXTITrigger_TypeDef trigger) {
-	GPIOinConfigure(
-			periphery->GPIO,
-			periphery->pin,
-			periphery->enabled_state ? GPIO_PuPd_UP : GPIO_PuPd_DOWN,
-			EXTI_Mode_Interrupt,
-			trigger);
-	
-	EXTI->PR = (1 << periphery->pin);
-	
-	periphery_interrupts_enable(periphery);
-}
-
 void periphery_interrupts_enable(Periphery* periphery) {
+	EXTI->PR = (1 << periphery->pin);
 	for (int i = 0; i < PERIPHERY_CONFIG_COUNT; i++) {
 		if (periphery_config[i].pin_begin <= periphery->pin && periphery->pin <= periphery_config[i].pin_end) {
 			if (!periphery_config[i].enabled) {
@@ -92,18 +80,6 @@ void timer_interrupts_enable(Timer* timer) {
 			if (!timer_config[i].enabled) {
 				timer_config[i].enabled = true;
 				NVIC_EnableIRQ(timer_config[i].irq);
-			}
-			break;
-		}
-	}
-}
-
-void timer_interrupts_disable(Timer* timer) {
-	for (int i = 0; i < TIMER_CONFIG_COUNT; i++) {
-		if (timer_config[i].timer == timer) {
-			if (timer_config[i].enabled) {
-				timer_config[i].enabled = false;
-				NVIC_DisableIRQ(timer_config[i].irq);
 			}
 			break;
 		}

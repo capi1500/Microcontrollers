@@ -1,6 +1,7 @@
 #include "calculator.h"
+#include "../periphery/display.h"
 
-void append_number(Calculator* calculator, int* num, int digit) {
+void append_number(long long* num, int digit) {
 	*num = (*num * 10) + digit;
 }
 
@@ -10,11 +11,13 @@ void calculator_init(Calculator* calculator) {
 	calculator->result = 0;
 	calculator->operator = None;
 	calculator->state = FirstNumber;
+	display_clear();
+	display_draw(calculator);
 }
 
-int calculate(Calculator* calculator) {
-	int a = calculator->num1;
-	int b = calculator->num2;
+long long calculate(Calculator* calculator) {
+	long long a = calculator->num1;
+	long long b = calculator->num2;
 	switch (calculator->operator) {
 		case Plus:
 			return a + b;
@@ -33,14 +36,14 @@ void calculator_process_input(Calculator* calculator, Input input) {
 	if (input <= Num9) {
 		switch (calculator->state) {
 			case FirstNumber:
-				append_number(calculator, &calculator->num1, input);
+				append_number(&calculator->num1, input);
 				break;
 			case SecondNumber:
-				append_number(calculator, &calculator->num2, input);
+				append_number(&calculator->num2, input);
 				break;
 			case Result:
 				calculator_init(calculator); // does reset
-				append_number(calculator, &calculator->num1, input);
+				append_number(&calculator->num1, input);
 				break;
 		}
 	} else if (input <= OpDiv) {
@@ -64,8 +67,6 @@ void calculator_process_input(Calculator* calculator, Input input) {
 		switch (calculator->state) {
 			case SecondNumber:
 				calculator->result = calculate(calculator);
-				calculator->num1 = 0;
-				calculator->num2 = 0;
 				calculator->state = Result;
 				break;
 			default:

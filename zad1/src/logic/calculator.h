@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CALCULATOR_H
+#define CALCULATOR_H
 
 #include "input.h"
 
@@ -17,12 +18,14 @@ typedef enum {
 } State;
 
 typedef struct {
-	int num1;
-	int num2;
-	int result;
+	long long num1;
+	long long num2;
+	long long result;
 	Operator operator;
 	State state;
 } Calculator;
 
 void calculator_init(Calculator* calculator);
 void calculator_process_input(Calculator* calculator, Input input);
+
+#endif // CALCULATOR_H

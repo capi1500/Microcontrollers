@@ -40,6 +40,10 @@ void timer_start(Timer* timer) {
 	timer->CR1 |= TIM_CR1_CEN;
 }
 
+void timer_stop(Timer* timer) {
+	timer->CR1 &= ~TIM_CR1_CEN;
+}
+
 void timer_enable_interrupts(Timer* timer) {
 	timer->SR = ~(TIM_SR_UIF | TIM_SR_CC1IF);
 	timer->DIER = TIM_DIER_UIE | TIM_DIER_CC1IE;

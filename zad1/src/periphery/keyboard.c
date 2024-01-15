@@ -5,6 +5,18 @@
 static Periphery columns[4];
 static Periphery rows[4];
 
+#define COUNT_TO_REACH_FIRST 5
+#define COUNT_TO_REACH_MAX 32
+#define COUNT_TO_REACH_MIN 4
+
+typedef struct {
+	bool first;
+	unsigned count;
+	unsigned count_to_reach;
+} KeyboardButtonRepeat;
+
+KeyboardButtonRepeat buttons[4][4];
+
 Periphery* get_keyboard_columns(void) {
 	return columns;
 }
@@ -21,13 +33,18 @@ void keyboard_init(void) {
 	periphery_init(&columns[COLUMN_3], GPIOC, 2, false);
 	periphery_init(&columns[COLUMN_4], GPIOC, 3, false);
 	
-	periphery_init(&rows[ROW_1], GPIOC, 6, true);
-	periphery_init(&rows[ROW_2], GPIOC, 7, true);
-	periphery_init(&rows[ROW_3], GPIOC, 8, true);
-	periphery_init(&rows[ROW_4], GPIOC, 9, true);
+	periphery_init(&rows[ROW_1], GPIOC, 6, false);
+	periphery_init(&rows[ROW_2], GPIOC, 7, false);
+	periphery_init(&rows[ROW_3], GPIOC, 8, false);
+	periphery_init(&rows[ROW_4], GPIOC, 9, false);
 	
 	for (KeyboardColumn i = COLUMN_1; i < COLUMN_COUNT; i++) {
 		periphery_set(&columns[i], false);
+		for (KeyboardRow j = ROW_1; j < ROW_COUNT; j++) {
+			buttons[i][j].first = true;
+			buttons[i][j].count = 0;
+			buttons[i][j].count_to_reach = COUNT_TO_REACH_FIRST;
+		}
 	}
 	for (KeyboardColumn i = COLUMN_1; i < COLUMN_COUNT; i++) {
 		GPIOoutConfigure(
@@ -38,7 +55,13 @@ void keyboard_init(void) {
 				GPIO_PuPd_NOPULL);
 	}
 	for (KeyboardRow i = ROW_1; i < ROW_COUNT; i++) {
-		periphery_interrupts_setup(&rows[i], EXTI_Trigger_Falling);
+		GPIOinConfigure(
+				rows[i].GPIO,
+				rows[i].pin,
+				GPIO_PuPd_UP,
+				EXTI_Mode_Interrupt,
+				EXTI_Trigger_Falling);
+		periphery_interrupts_enable(&rows[i]);
 	}
 }
 
@@ -69,9 +92,26 @@ bool keyboard_scan_columns(void) {
 		for (KeyboardRow j = ROW_1; j < ROW_COUNT; j++) {
 			if (rows_values[j]) {
 				anything_pressed = true;
-				// TODO: sprawdzić, czy jest to przytrzymanie
-				input_add_event(input_map_row_column(i, j));
-				break;
+				
+				buttons[i][j].count++;
+				if (buttons[i][j].count >= buttons[i][j].count_to_reach) {
+					buttons[i][j].count = 0;
+					if (buttons[i][j].first) {
+						buttons[i][j].first = false;
+						buttons[i][j].count_to_reach = COUNT_TO_REACH_MAX;
+					} else {
+						buttons[i][j].count_to_reach /= 2;
+						if (buttons[i][j].count_to_reach < COUNT_TO_REACH_MIN) {
+							buttons[i][j].count_to_reach = COUNT_TO_REACH_MIN;
+						}
+					}
+					
+					input_add_event(input_map_row_column(i, j));
+				}
+			} else {
+				buttons[i][j].first = true;
+				buttons[i][j].count = 0;
+				buttons[i][j].count_to_reach = COUNT_TO_REACH_FIRST;
 			}
 		}
 	}

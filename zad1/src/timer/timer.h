@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TIMER_H
+#define TIMER_H
 
 #include <stm32.h>
 
@@ -20,7 +21,10 @@ void timer_init(Timer* timer, TimerConfig config);
 void timer_update(Timer* timer, TimerConfig config, bool force);
 
 void timer_start(Timer* timer);
+void timer_stop(Timer* timer);
 void timer_enable_interrupts(Timer* timer);
 
 unsigned timer_get_value(Timer* timer);
 void timer_set_value(Timer* timer, unsigned value);
+
+#endif // TIMER_H
