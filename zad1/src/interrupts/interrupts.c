@@ -1,4 +1,3 @@
-#include <lcd.h>
 #include "interrupts.h"
 
 typedef struct {
@@ -6,32 +5,51 @@ typedef struct {
     int32_t irq;
     uint8_t pin_begin;
     uint8_t pin_end;
-} Config;
+} PeripheryInterruptConfig;
 
-#define CONFIG_COUNT 7
+#define PERIPHERY_CONFIG_COUNT 7
+static PeripheryInterruptConfig periphery_config[PERIPHERY_CONFIG_COUNT];
 
-static Config config[CONFIG_COUNT];
+typedef struct {
+	bool enabled;
+	int32_t irq;
+	Timer* timer;
+} TimerInterruptConfig;
 
-void init_config(Config* c, int32_t irq, uint8_t pin_begin, uint8_t pin_end) {
+#define TIMER_CONFIG_COUNT 4
+static TimerInterruptConfig timer_config[TIMER_CONFIG_COUNT];
+
+void init_periphery_config(PeripheryInterruptConfig* c, int32_t irq, uint8_t pin_begin, uint8_t pin_end) {
 	c->irq = irq;
 	c->pin_begin = pin_begin;
 	c->pin_end = pin_end;
 	c->enabled = false;
 }
 
-void interrupts_init(void) {
-	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
-
-	init_config(&config[0], EXTI0_IRQn, 0, 0);
-	init_config(&config[1], EXTI1_IRQn, 1, 1);
-	init_config(&config[2], EXTI2_IRQn, 2, 2);
-	init_config(&config[3], EXTI3_IRQn, 3, 3);
-	init_config(&config[4], EXTI4_IRQn, 4, 4);
-	init_config(&config[5], EXTI9_5_IRQn, 5, 9);
-	init_config(&config[6], EXTI15_10_IRQn, 10, 15);
+void init_timer_config(TimerInterruptConfig* c, Timer* timer, int32_t irq) {
+	c->irq = irq;
+	c->timer = timer;
+	c->enabled = false;
 }
 
-void interrupt_periphery_setup(Periphery* periphery, EXTITrigger_TypeDef trigger) {
+void interrupts_init(void) {
+	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+	
+	init_periphery_config(&periphery_config[0], EXTI0_IRQn, 0, 0);
+	init_periphery_config(&periphery_config[1], EXTI1_IRQn, 1, 1);
+	init_periphery_config(&periphery_config[2], EXTI2_IRQn, 2, 2);
+	init_periphery_config(&periphery_config[3], EXTI3_IRQn, 3, 3);
+	init_periphery_config(&periphery_config[4], EXTI4_IRQn, 4, 4);
+	init_periphery_config(&periphery_config[5], EXTI9_5_IRQn, 5, 9);
+	init_periphery_config(&periphery_config[6], EXTI15_10_IRQn, 10, 15);
+	
+	init_timer_config(&timer_config[0], TIM2, TIM2_IRQn);
+	init_timer_config(&timer_config[1], TIM3, TIM3_IRQn);
+	init_timer_config(&timer_config[2], TIM4, TIM4_IRQn);
+	init_timer_config(&timer_config[3], TIM5, TIM5_IRQn);
+}
+
+void periphery_interrupts_setup(Periphery* periphery, EXTITrigger_TypeDef trigger) {
 	GPIOinConfigure(
 			periphery->GPIO,
 			periphery->pin,
@@ -41,27 +59,51 @@ void interrupt_periphery_setup(Periphery* periphery, EXTITrigger_TypeDef trigger
 	
 	EXTI->PR = (1 << periphery->pin);
 	
-	interrupt_enable_periphery_interrupts(periphery);
+	periphery_interrupts_enable(periphery);
 }
 
-void interrupt_enable_periphery_interrupts(Periphery* periphery) {
-	for (int i = 0; i < CONFIG_COUNT; i++) {
-		if (config[i].pin_begin <= periphery->pin && periphery->pin <= config[i].pin_end) {
-			if (!config[i].enabled) {
-				config[i].enabled = true;
-				NVIC_EnableIRQ(config[i].irq);
+void periphery_interrupts_enable(Periphery* periphery) {
+	for (int i = 0; i < PERIPHERY_CONFIG_COUNT; i++) {
+		if (periphery_config[i].pin_begin <= periphery->pin && periphery->pin <= periphery_config[i].pin_end) {
+			if (!periphery_config[i].enabled) {
+				periphery_config[i].enabled = true;
+				NVIC_EnableIRQ(periphery_config[i].irq);
 			}
 			break;
 		}
 	}
 }
 
-void interrupt_disable_periphery_interrupts(Periphery* periphery) {
-	for (int i = 0; i < CONFIG_COUNT; i++) {
-		if (config[i].pin_begin <= periphery->pin && periphery->pin <= config[i].pin_end) {
-			if (config[i].enabled) {
-				config[i].enabled = false;
-				NVIC_DisableIRQ(config[i].irq);
+void periphery_interrupts_disable(Periphery* periphery) {
+	for (int i = 0; i < PERIPHERY_CONFIG_COUNT; i++) {
+		if (periphery_config[i].pin_begin <= periphery->pin && periphery->pin <= periphery_config[i].pin_end) {
+			if (periphery_config[i].enabled) {
+				periphery_config[i].enabled = false;
+				NVIC_DisableIRQ(periphery_config[i].irq);
+			}
+			break;
+		}
+	}
+}
+
+void timer_interrupts_enable(Timer* timer) {
+	for (int i = 0; i < TIMER_CONFIG_COUNT; i++) {
+		if (timer_config[i].timer == timer) {
+			if (!timer_config[i].enabled) {
+				timer_config[i].enabled = true;
+				NVIC_EnableIRQ(timer_config[i].irq);
+			}
+			break;
+		}
+	}
+}
+
+void timer_interrupts_disable(Timer* timer) {
+	for (int i = 0; i < TIMER_CONFIG_COUNT; i++) {
+		if (timer_config[i].timer == timer) {
+			if (timer_config[i].enabled) {
+				timer_config[i].enabled = false;
+				NVIC_DisableIRQ(timer_config[i].irq);
 			}
 			break;
 		}

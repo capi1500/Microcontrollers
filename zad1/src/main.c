@@ -5,22 +5,23 @@
 #include "interrupts/interrupts.h"
 #include "interrupts/handlers.h"
 #include "timer/timer.h"
-#include "periphery/buttons.h"
 
 Calculator calculator;
 
 int main() {
-	display_init();
-	
 	interrupt_handlers_init();
-	calculator_init(&calculator);
 	interrupts_init();
 	
-	keyboard_init();
+	TimerConfig timer_config;
+	timer_config.updates_per_second = 1000;
+	timer_config.count_limit = 10;
+	timer_config.counting_direction = COUNTING_UP;
+	timer_init(TIM3, timer_config);
+	timer_enable_interrupts(TIM3);
 	
-	// Skonfiguruj TIMx, aby zgłaszał przerwanie w regularnych
-	// odstępach czasu, np. co 10 ms, ale nie włączaj licznika
-//	timer_init(TIM1);
+	display_init();
+	keyboard_init();
+	calculator_init(&calculator);
 	
 	while(true) {
 		__NOP();

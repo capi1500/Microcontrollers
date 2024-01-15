@@ -19,7 +19,6 @@ OBJECTS = src/main.o \
 	src/periphery/keyboard.o \
 	src/periphery/periphery.o \
 	src/periphery/display.o \
-	src/periphery/buttons.o \
 	src/interrupts/interrupts.o \
 	src/interrupts/handlers.o \
 	src/timer/timer.o \

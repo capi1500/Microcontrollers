@@ -11,7 +11,7 @@
 int main() {
 	interrupt_handlers_init();
 	init_button_messages();
-
+	
 	interrupts_init();
 
 	init_buttons();

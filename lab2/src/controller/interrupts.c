@@ -5,13 +5,13 @@ typedef struct {
     int32_t irq;
     uint8_t pin_begin;
     uint8_t pin_end;
-} Config;
+} PeripheryInterruptConfig;
 
-#define CONFIG_COUNT 7
+#define PERIPHERY_CONFIG_COUNT 7
 
-static Config config[CONFIG_COUNT];
+static PeripheryInterruptConfig config[PERIPHERY_CONFIG_COUNT];
 
-void init_config(Config* c, int32_t irq, uint8_t pin_begin, uint8_t pin_end) {
+void init_config(PeripheryInterruptConfig* c, int32_t irq, uint8_t pin_begin, uint8_t pin_end) {
 	c->irq = irq;
 	c->pin_begin = pin_begin;
 	c->pin_end = pin_end;
@@ -41,7 +41,7 @@ void interrupt_periphery_setup(Periphery* periphery) {
 	
 	EXTI->PR = (1 << pin);
 	
-	for (int i = 0; i < CONFIG_COUNT; i++) {
+	for (int i = 0; i < PERIPHERY_CONFIG_COUNT; i++) {
 		if (config[i].pin_begin <= pin && pin <= config[i].pin_end && !config[i].enabled) {
 			NVIC_EnableIRQ(config[i].irq);
 			config[i].enabled = true;

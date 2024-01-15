@@ -38,7 +38,7 @@ void keyboard_init(void) {
 				GPIO_PuPd_NOPULL);
 	}
 	for (KeyboardRow i = ROW_1; i < ROW_COUNT; i++) {
-		interrupt_periphery_setup(&rows[i], EXTI_Trigger_Falling);
+		periphery_interrupts_setup(&rows[i], EXTI_Trigger_Falling);
 	}
 }
 
