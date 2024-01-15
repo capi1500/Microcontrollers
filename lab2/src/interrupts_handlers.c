@@ -9,7 +9,7 @@
 
 static QueueBuffer buffer;
 
-void init_interrupt_handlers(void) {
+void interrupt_handlers_init(void) {
 	init_queue_buffer(&buffer);
 }
 

@@ -9,7 +9,7 @@
 #include "commands.h"
 
 int main() {
-	init_interrupt_handlers();
+	interrupt_handlers_init();
 	init_button_messages();
 
 	interrupts_init();

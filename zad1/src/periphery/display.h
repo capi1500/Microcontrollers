@@ -1,7 +1,7 @@
 #pragma once
 
 #include <lcd.h>
-#include "calculator.h"
+#include "../logic/calculator.h"
 
 void display_init(void);
 

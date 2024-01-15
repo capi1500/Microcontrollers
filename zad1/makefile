@@ -14,9 +14,15 @@ LDFLAGS = $(FLAGS) -Wl,--gc-sections -nostartfiles \
 vpath %.c ../stm32/src
 
 OBJECTS = src/main.o \
-	src/calculator.o \
-	src/input.o \
-	src/display.o \
+	src/logic/calculator.o \
+	src/logic/input.o \
+	src/periphery/keyboard.o \
+	src/periphery/periphery.o \
+	src/periphery/display.o \
+	src/periphery/buttons.o \
+	src/interrupts/interrupts.o \
+	src/interrupts/handlers.o \
+	src/timer/timer.o \
 	startup_stm32.o \
 	delay.o \
 	fonts.o \
