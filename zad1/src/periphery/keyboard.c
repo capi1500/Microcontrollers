@@ -11,6 +11,7 @@ static Periphery rows[4];
 
 typedef struct {
 	bool first;
+	bool can_repeat;
 	unsigned count;
 	unsigned count_to_reach;
 } KeyboardButtonRepeat;
@@ -44,6 +45,7 @@ void keyboard_init(void) {
 			buttons[i][j].first = true;
 			buttons[i][j].count = 0;
 			buttons[i][j].count_to_reach = COUNT_TO_REACH_FIRST;
+			buttons[i][j].can_repeat = (i <= COLUMN_3 && j <= ROW_3) || (i == COLUMN_2 && j == ROW_4);
 		}
 	}
 	for (KeyboardColumn i = COLUMN_1; i < COLUMN_COUNT; i++) {
@@ -86,7 +88,7 @@ bool keyboard_scan_columns(void) {
 		periphery_set(&columns[i], false);
 		bool rows_values[4];
 		for (KeyboardRow j = ROW_1; j < ROW_COUNT; j++) {
-			rows_values[j] = periphery_read_state(&rows[j]); // TODO: tak, czy powinno być zmienione na is_on??
+			rows_values[j] = periphery_read_state(&rows[j]);
 		}
 		periphery_set(&columns[i], true);
 		for (KeyboardRow j = ROW_1; j < ROW_COUNT; j++) {
@@ -94,7 +96,7 @@ bool keyboard_scan_columns(void) {
 				anything_pressed = true;
 				
 				buttons[i][j].count++;
-				if (buttons[i][j].count >= buttons[i][j].count_to_reach) {
+				if (buttons[i][j].count >= buttons[i][j].count_to_reach && (buttons[i][j].first || buttons[i][j].can_repeat)) {
 					buttons[i][j].count = 0;
 					if (buttons[i][j].first) {
 						buttons[i][j].first = false;

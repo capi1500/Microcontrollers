@@ -1,19 +1,17 @@
+#include <stdbool.h>
 #include <fonts.h>
 #include <lcd.h>
 #include "display.h"
 
 #define COLUMN_COUNT 16
 
-#define MIN_NUMBER (-2147483648ll)
-#define MAX_NUMBER 2147483647ll
-
 void display_init(void) {
 	LCDconfigure(&font8x16);
 }
 
-void display_number(long long num, int column) {
-	if (num < MIN_NUMBER || num > MAX_NUMBER) {
-		LCDgoto(column, COLUMN_COUNT - 13);
+void display_number(long long num, int row) {
+	if (num_out_of_bounds(num)) {
+		LCDgoto(row, COLUMN_COUNT - 13);
 		LCDputchar('O');
 		LCDputchar('U');
 		LCDputchar('T');
@@ -27,21 +25,27 @@ void display_number(long long num, int column) {
 		LCDputchar('N');
 		LCDputchar('D');
 		LCDputchar('S');
-		return;
+		
+		// TODO
+		row = 4;
+//		return;
 	}
 	if (num == 0) {
-		LCDgoto(column, COLUMN_COUNT - 1);
+		LCDgoto(row, COLUMN_COUNT - 1);
 		LCDputchar('0' + num % 10);
 		return;
 	}
 	bool negative = num < 0;
+	if (negative) {
+		num *= -1;
+	}
 	int i;
 	for (i = COLUMN_COUNT - 1; num != 0; i--, num /= 10) {
-		LCDgoto(column, i);
+		LCDgoto(row, i);
 		LCDputchar('0' + num % 10);
 	}
 	if (negative) {
-		LCDgoto(column, i);
+		LCDgoto(row, i);
 		LCDputchar('-');
 	}
 }

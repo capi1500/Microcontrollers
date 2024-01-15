@@ -1,6 +1,7 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 
+#include <stdbool.h>
 #include "input.h"
 
 typedef enum {
@@ -24,6 +25,11 @@ typedef struct {
 	Operator operator;
 	State state;
 } Calculator;
+
+#define MIN_NUMBER (-2147483648ll)
+#define MAX_NUMBER 2147483647ll
+
+bool num_out_of_bounds(long long n);
 
 void calculator_init(Calculator* calculator);
 void calculator_process_input(Calculator* calculator, Input input);

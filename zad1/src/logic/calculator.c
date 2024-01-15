@@ -5,6 +5,10 @@ void append_number(long long* num, int digit) {
 	*num = (*num * 10) + digit;
 }
 
+bool num_out_of_bounds(long long n) {
+	return n < MIN_NUMBER || n > MAX_NUMBER;
+}
+
 void calculator_init(Calculator* calculator) {
 	calculator->num1 = 0;
 	calculator->num2 = 0;
@@ -18,6 +22,9 @@ void calculator_init(Calculator* calculator) {
 long long calculate(Calculator* calculator) {
 	long long a = calculator->num1;
 	long long b = calculator->num2;
+	if (num_out_of_bounds(a) || num_out_of_bounds(b)) {
+		return MAX_NUMBER + 1;
+	}
 	switch (calculator->operator) {
 		case Plus:
 			return a + b;
@@ -26,7 +33,7 @@ long long calculate(Calculator* calculator) {
 		case Multiply:
 			return a * b;
 		case Divide:
-			return b == 0 ? 0 : a / b;
+			return b == 0 ? (MAX_NUMBER + 1) : a / b;
 		default:
 			return 0;
 	}
@@ -57,23 +64,40 @@ void calculator_process_input(Calculator* calculator, Input input) {
 				calculator->num1 = calculate(calculator);
 				calculator->num2 = 0;
 				calculator->operator = operator;
+				display_clear();
+				display_draw(calculator);
 				break;
 			case Result:
+				calculator->num1 = calculator->result;
+				calculator->num2 = 0;
+				calculator->result = 0;
 				calculator->operator = operator;
 				calculator->state = SecondNumber;
+				display_clear();
+				display_draw(calculator);
 				break;
 		}
 	} else if (input == OpResult) {
 		switch (calculator->state) {
+			case FirstNumber:
+				calculator->result = calculator->num1;
+				calculator->operator = None;
+				calculator->state = Result;
+				break;
 			case SecondNumber:
 				calculator->result = calculate(calculator);
 				calculator->state = Result;
 				break;
-			default:
+			case Result:
+				calculator->num1 = calculator->result;
+				calculator->num2 = 0;
+				calculator->result = 0;
+				calculator->operator = None;
+				calculator->state = FirstNumber;
+				display_clear();
+				display_draw(calculator);
 				break;
 		}
-		calculator->operator = None;
-		calculator->state = Result;
 	} else if (input == OpClear) {
 		calculator_init(calculator);
 	}
