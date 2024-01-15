@@ -25,10 +25,7 @@ void display_number(long long num, int row) {
 		LCDputchar('N');
 		LCDputchar('D');
 		LCDputchar('S');
-		
-		// TODO
-		row = 4;
-//		return;
+		return;
 	}
 	if (num == 0) {
 		LCDgoto(row, COLUMN_COUNT - 1);

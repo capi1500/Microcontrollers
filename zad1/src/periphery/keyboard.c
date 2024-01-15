@@ -5,7 +5,7 @@
 static Periphery columns[4];
 static Periphery rows[4];
 
-#define COUNT_TO_REACH_FIRST 5
+#define COUNT_TO_REACH_FIRST 3
 #define COUNT_TO_REACH_MAX 32
 #define COUNT_TO_REACH_MIN 4
 
