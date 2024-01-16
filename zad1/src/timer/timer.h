@@ -17,13 +17,19 @@ typedef struct {
 	unsigned count_limit;
 } TimerConfig;
 
+// Inicjalizacja licznika zgodnie z konfiguracja [config]
 void timer_init(Timer* timer, TimerConfig config);
+// Aktualizacja wskaźnika zgodnie z konfiguracja [config]
 void timer_update(Timer* timer, TimerConfig config, bool force);
 
+// Uruchomienie licznika
 void timer_start(Timer* timer);
+// Zatrzymanie licznika
 void timer_stop(Timer* timer);
+// Uruchomienie przerwań licznika
 void timer_enable_interrupts(Timer* timer);
 
+// Ustawienie wartości licznika
 void timer_set_value(Timer* timer, unsigned value);
 
 #endif // TIMER_H

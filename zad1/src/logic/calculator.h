@@ -29,9 +29,12 @@ typedef struct {
 #define MIN_NUMBER (-2147483648ll)
 #define MAX_NUMBER 2147483647ll
 
+// Czy liczba jest poza obsługiwanym zakresem
 bool num_out_of_bounds(long long n);
 
+// Inicjalizacja logiki kalkulatora
 void calculator_init(Calculator* calculator);
+// Obsługa zdarzenia wejścia
 void calculator_process_input(Calculator* calculator, Input input);
 
 #endif // CALCULATOR_H

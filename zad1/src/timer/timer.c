@@ -45,11 +45,12 @@ void timer_stop(Timer* timer) {
 }
 
 void timer_enable_interrupts(Timer* timer) {
-	timer->SR = ~(TIM_SR_UIF | TIM_SR_CC1IF);
-	timer->DIER = TIM_DIER_UIE | TIM_DIER_CC1IE;
+	timer->SR = ~(TIM_SR_UIF);
+	timer->DIER = TIM_DIER_UIE;
 	timer_interrupts_enable(timer);
 }
 
 void timer_set_value(Timer* timer, unsigned value) {
+	timer_force_update(timer);
 	timer->CNT = value;
 }

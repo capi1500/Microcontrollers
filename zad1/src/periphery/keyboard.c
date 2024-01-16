@@ -85,13 +85,18 @@ Input input_map_row_column(KeyboardColumn column, KeyboardRow row) {
 bool keyboard_scan_columns(void) {
 	bool anything_pressed = false;
 	for (KeyboardColumn i = COLUMN_1; i < COLUMN_COUNT; i++) {
+		// Włączenie kolumnie
 		periphery_set(&columns[i], false);
 		bool rows_values[4];
+		// Odczyt wartości rzędów
 		for (KeyboardRow j = ROW_1; j < ROW_COUNT; j++) {
 			rows_values[j] = periphery_read_state(&rows[j]);
 		}
+		// Wyłączenie kolumny
 		periphery_set(&columns[i], true);
+		
 		for (KeyboardRow j = ROW_1; j < ROW_COUNT; j++) {
+			// Obsługa przytrzymania przycisku
 			if (rows_values[j]) {
 				anything_pressed = true;
 				

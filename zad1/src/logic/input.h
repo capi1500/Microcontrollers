@@ -21,9 +21,12 @@ typedef enum {
 	OpNone
 } Input;
 
+// Pobranie liczby oczekujących zdarzeń
 unsigned input_get_event_count(void);
+// Pobranie pierwszego oczekującego zdarzenia
 Input input_get_event(void);
 
+// Dodanie nowego zdarzenia
 void input_add_event(Input input);
 
-#endif // INTERRUPTS_H
+#endif // INPUT_H
